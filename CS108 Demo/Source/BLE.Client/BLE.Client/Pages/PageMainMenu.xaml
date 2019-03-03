@@ -7,7 +7,7 @@
 
 			<RelativeLayout>
 
-          <Button Text="Issue Product" Font="Large"
+          <Button Text="Output" Font="Large"
               HorizontalOptions="FillAndExpand"
               BackgroundColor="#C3C3C3"
               TextColor="Black"

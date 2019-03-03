@@ -164,6 +164,10 @@ namespace BLE.Client.ViewModels
         //private DateTime _dateSale = DateTime.Now;
         public DateTime SelectedDate { get; set; } = DateTime.Now;
 
+        //public string TotalAmount { get; set; } = "0";
+        private string _TotalAmountt = "0";
+        public string TotalAmount { get { return _TotalAmountt; } }
+
         public ObservableCollection<KhoResultDTO> Items {get; set;} = new ObservableCollection<KhoResultDTO>();
 
         public ObservableCollection<Starff> Staffs { get; private set; } = new ObservableCollection<Starff>();
@@ -386,8 +390,12 @@ namespace BLE.Client.ViewModels
                         //TagInfoList.Add(item);
                         TagInfoList.Insert(0, item);
                         var dto = this.fromServer.Where(e => e.RfId.Equals(item.EPC, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-                        if(dto != null)
+                        if (dto != null)
+                        {
+                            _TotalAmountt = (Convert.ToInt32(String.IsNullOrEmpty(_TotalAmountt) ? "0" : TotalAmount) + dto.GiaBan).ToString();
+                            RaisePropertyChanged(() => TotalAmount);
                             this.Items.Add(dto);
+                        }
                         
 
                         _newtagCount4BeepSound++;
@@ -603,7 +611,10 @@ namespace BLE.Client.ViewModels
                 lock (Items)
                 {
                     Items.Clear();
+
                 }
+                _TotalAmountt = "0";
+                RaisePropertyChanged(() => TotalAmount);
             });
         }
     }

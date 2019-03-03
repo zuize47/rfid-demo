@@ -3131,11 +3131,11 @@ namespace BLE.Client.Droid
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f090027
-			public const int ApplicationName = 2131296295;
+			// aapt resource value: 0x7f090028
+			public const int ApplicationName = 2131296296;
 			
-			// aapt resource value: 0x7f090026
-			public const int Hello = 2131296294;
+			// aapt resource value: 0x7f090027
+			public const int Hello = 2131296295;
 			
 			// aapt resource value: 0x7f09000f
 			public const int abc_action_bar_home_description = 2131296271;
@@ -3203,8 +3203,8 @@ namespace BLE.Client.Droid
 			// aapt resource value: 0x7f090025
 			public const int character_counter_pattern = 2131296293;
 			
-			// aapt resource value: 0x7f090028
-			public const int library_name = 2131296296;
+			// aapt resource value: 0x7f090026
+			public const int library_name = 2131296294;
 			
 			// aapt resource value: 0x7f090000
 			public const int mr_button_content_description = 2131296256;
