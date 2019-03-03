@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:pages="clr-namespace:BLE.Client.Pages;assembly=BLE.Client"
+             x:Class="BLE.Client.Pages.PageFirst"
+			 Title="Xuất hàng">
+
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text= "{Binding startInventoryButtonText}" Command="{Binding OnStartInventoryButtonCommand}"  />
+    <ToolbarItem Text="Xóa" Command="{Binding OnClearButtonCommand}"  />
+    <ToolbarItem Text="Lưu" Command="{Binding OnSaveButtonCommand}" />
+  </ContentPage.ToolbarItems>
+  <Grid Padding="5" BackgroundColor="White">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    
+    <!--<StackLayout HeightRequest="30" VerticalOptions="Start" HorizontalOptions="FillAndExpand" Spacing="20">
+            <Label Text="Xuất" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
+        </StackLayout>-->
+    <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HeightRequest="40" >
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="13" Text="Date" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="80" />
+        <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}" />
+      </StackLayout>
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="14" Text="Employee:" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="120" />
+        <Picker x:Name="pickerEmployee" Title="Employee" ItemsSource="{Binding Staffs}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedNhanVien, Mode=TwoWay}" />
+      </StackLayout>
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="14" Text="Customer" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="80" />
+        <Picker x:Name="pickerCustomer" Title="Customer" ItemsSource="{Binding Customers}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}" />
+      </StackLayout>
+    </StackLayout>
+    <StackLayout  Grid.Row="1" Grid.Column="0" Orientation="Horizontal" >
+      <ListView x:Name="listView"
+                ItemsSource="{Binding Items}"
+                CachingStrategy="RecycleElement"
+                RowHeight="25">
+        <ListView.Header>
+          <Grid BackgroundColor="#cccccc">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="50" />
+              <ColumnDefinition Width="100" />
+              <ColumnDefinition Width="100" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Text="Code" Grid.Row="0" Grid.Column="0" />
+            <Label Text="Name" Grid.Row="0" Grid.Column="1" />
+            <Label Text="Price" Grid.Row="0" Grid.Column="2" />
+            <Label Text="EPC(RFID)" Grid.Row="0" Grid.Column="3" />
+          </Grid>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <StackLayout Orientation="Horizontal" >
+
+                <Label Text="{Binding Code}" WidthRequest="50"
+                       FontAttributes="Bold" />
+                <Label Text="{Binding Name}" WidthRequest="100" />
+                <Label Text="{Binding GiaBan}" WidthRequest="100" HorizontalTextAlignment="End"  />
+                <Label Text="{Binding RfId}"  />
+              </StackLayout>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+
+      </ListView>
+
+    </StackLayout>
+  </Grid>
+
+</pages:BasePage>
