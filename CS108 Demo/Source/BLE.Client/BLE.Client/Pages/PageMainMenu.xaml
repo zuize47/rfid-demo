@@ -7,7 +7,7 @@
 
 			<RelativeLayout>
 
-          <Button Text="Output" Font="Large"
+          <Button Text="Demo RFID" Font="Large"
               HorizontalOptions="FillAndExpand"
               BackgroundColor="#C3C3C3"
               TextColor="Black"
@@ -16,7 +16,7 @@
               RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0, Constant=2}"
               RelativeLayout.YConstraint ="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0, Constant=2}"
               RelativeLayout.HeightConstraint="{ConstraintExpression Type = RelativeToParent, Property=Height, Factor=0.21, Constant=-4}"
-              RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=0.5, Constant=-4}"
+              RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=1.0, Constant=-4}"
 			        />
 
             <!--<Button Text="Read/Write" Font="Large"
@@ -31,7 +31,7 @@
 				        RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=0.5, Constant=-4}" 	
 			      />-->
 
-            <Button Text="Inventory" Font="Large"
+            <!-- <Button Text="Inventory" Font="Large"
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="#C3C3C3"
                 TextColor="Black"
@@ -41,7 +41,7 @@
 				        RelativeLayout.YConstraint ="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0, Constant=2}"
 				        RelativeLayout.HeightConstraint="{ConstraintExpression Type = RelativeToParent, Property=Height, Factor=0.21, Constant=-4}" 
 				        RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=0.5, Constant=-4}" 	
-            />
+            />-->
 
             <!--<Button Text="Register Tag" Font="Large"
 				        HorizontalOptions="FillAndExpand"

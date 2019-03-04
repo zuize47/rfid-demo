@@ -307,13 +307,14 @@ namespace BLE.Client.ViewModels
 
         void OnReadWriteButtonClicked()
         {
-            if (BleMvxApplication._reader.Status == CSLibrary.HighLevelInterface.READERSTATE.DISCONNECT)
-            {
-                ShowConnectionWarringMessage();
-                return;
-            }
-            ShowViewModel<ViewModelFirst>(new MvxBundle());
+            //if (BleMvxApplication._reader.Status == CSLibrary.HighLevelInterface.READERSTATE.DISCONNECT)
+            //{
+            //    ShowConnectionWarringMessage();
+            //    return;
+            //}
+            //ShowViewModel<ViewModelFirst>(new MvxBundle());
             //ShowViewModel<ViewModelReadWrite>(new MvxBundle());
+            ShowViewModel<ViewModelDemo>(new MvxBundle());
         }
 
 		public ICommand OnRegisterTagButtonCommand { protected set; get; }

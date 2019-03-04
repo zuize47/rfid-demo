@@ -9,12 +9,13 @@ using System.Windows.Input;
 using Acr.UserDialogs;
 using BLE.Client.Data;
 using MvvmCross.Core.ViewModels;
+using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Contracts;
 using Xamarin.Forms;
 
 namespace BLE.Client.ViewModels
 {
-    public class ViewModelFirst : BaseViewModel
+    public class ViewModelAAFirstBB : BaseViewModel
     {
 
         private readonly IUserDialogs _userDialogs;
@@ -28,10 +29,10 @@ namespace BLE.Client.ViewModels
         public ICommand OnClearButtonCommand { protected set; get; }
         public ICommand OnSaveButtonCommand { protected set; get; }
 
-        public ViewModelFirst(IAdapter adapter, IUserDialogs userDialogs, IApiClient apiClient) : base(adapter)
+        public ViewModelAAFirstBB(IAdapter adapter, IUserDialogs userDialogs, IApiClient apiClient) : base(adapter)
         {
 
-            OnStartInventoryButtonCommand = new Command(StartInventoryClick);
+            /*OnStartInventoryButtonCommand = new Command(StartInventoryClick);
             OnClearButtonCommand = new Command(ClearClick);
             OnSaveButtonCommand = new Command(SaveClick);
 
@@ -79,10 +80,10 @@ namespace BLE.Client.ViewModels
             {
                 Name = "Thương",
                 Code = "Thương"
-            });
+            });*/
 
         }
-        
+
         private void GetDataFromServer()
         {
 
@@ -92,10 +93,10 @@ namespace BLE.Client.ViewModels
                     this.fromServer.Add(o);
                 }
             });
-            
+
         }
 
-       
+
 
         private void SaveClick()
         {
@@ -104,13 +105,13 @@ namespace BLE.Client.ViewModels
                 _userDialogs.ShowError("Please stop the scanning", 2000);
                 return;
             }
-            
-            if(SelectedNhanVien == null || SelectedCustomer == null)
+
+            if (SelectedNhanVien == null || SelectedCustomer == null)
             {
                 _userDialogs.ShowError("Please choose Employee and Customer", 2000);
                 return;
             }
-            if(this.Items.Count == 0)
+            if (this.Items.Count == 0)
             {
                 _userDialogs.ShowError("Please add product to sale", 2000);
                 return;
@@ -136,29 +137,55 @@ namespace BLE.Client.ViewModels
                     {
                         var all = Items.Select(e => e.RfId.ToUpper()).ToList();
                         fromServer = fromServer.Where(e => !all.Contains(e.RfId.ToUpper())).ToList();
-                        
+
                     }
                     lock (this.Items)
                     {
                         Items.Clear();
                     }
+                    _TotalAmountt = "0";
+                    RaisePropertyChanged(() => TotalAmount);
 
                 }).ContinueWith(result => Device.BeginInvokeOnMainThread(() => {
 
                     UserDialogs.Instance.HideLoading();
 
-                }) 
+                })
             );
 
         }
 
-        ~ViewModelFirst()
+        ~ViewModelAAFirstBB()
         {
-         
-                BleMvxApplication._reader.barcode.Stop();
-                //_barcodeScanning = false;
-                //SetEvent(false);
-            
+
+            BleMvxApplication._reader.barcode.Stop();
+            //_barcodeScanning = false;
+            //SetEvent(false);
+
+        }
+
+        private void SetEvent(bool enable)
+        {
+            // Cancel RFID event handler
+            BleMvxApplication._reader.rfid.ClearEventHandler();
+
+            // Cancel Barcode event handler
+            BleMvxApplication._reader.barcode.ClearEventHandler();
+
+            // Key Button event handler
+            BleMvxApplication._reader.notification.ClearEventHandler();
+
+            if (enable)
+            {
+                // RFID event handler
+                //BleMvxApplication._reader.rfid.OnAsyncCallback += new EventHandler<CSLibrary.Events.OnAsyncCallbackEventArgs>(TagInventoryEvent);
+                //BleMvxApplication._reader.rfid.OnStateChanged += new EventHandler<CSLibrary.Events.OnStateChangedEventArgs>(StateChangedEvent);
+
+
+                // Key Button event handler
+                BleMvxApplication._reader.notification.OnKeyEvent += new EventHandler<CSLibrary.Notification.HotKeyEventArgs>(HotKeys_OnKeyEvent);
+                //BleMvxApplication._reader.notification.OnVoltageEvent += new EventHandler<CSLibrary.Notification.VoltageEventArgs>(VoltageEvent);
+            }
         }
 
         //private DateTime _dateSale = DateTime.Now;
@@ -168,16 +195,16 @@ namespace BLE.Client.ViewModels
         private string _TotalAmountt = "0";
         public string TotalAmount { get { return _TotalAmountt; } }
 
-        public ObservableCollection<KhoResultDTO> Items {get; set;} = new ObservableCollection<KhoResultDTO>();
+        public ObservableCollection<KhoResultDTO> Items { get; set; } = new ObservableCollection<KhoResultDTO>();
 
         public ObservableCollection<Starff> Staffs { get; private set; } = new ObservableCollection<Starff>();
 
         public ObservableCollection<Customer> Customers { get; private set; } = new ObservableCollection<Customer>();
 
-        
+
         public Customer SelectedCustomer { get; set; }
-        
-        public Starff SelectedNhanVien { get; set; } 
+
+        public Starff SelectedNhanVien { get; set; }
 
 
         private ObservableCollection<TagInfoViewModel> _TagInfoList = new ObservableCollection<TagInfoViewModel>();
@@ -223,6 +250,32 @@ namespace BLE.Client.ViewModels
         private string _tagPerSecondText = "0 tags/s     ";
         public string tagPerSecondText { get { return _tagPerSecondText; } }
 
+
+        #region Key_event
+
+        void HotKeys_OnKeyEvent(object sender, CSLibrary.Notification.HotKeyEventArgs e)
+        {
+            //Page currentPage;
+
+            Trace.Message("Receive Key Event");
+
+            // try to get current page
+
+            if (e.KeyCode == CSLibrary.Notification.Key.BUTTON)
+            {
+                if (e.KeyDown)
+                {
+                    if (!_InventoryScanning)
+                        StartInventory();
+                }
+                else
+                {
+                    StopInventory();
+                }
+            }
+
+        }
+        #endregion
 
         void InventorySetting()
         {
@@ -290,7 +343,7 @@ namespace BLE.Client.ViewModels
 
 
             // Key Button event handler
-            //BleMvxApplication._reader.notification.OnKeyEvent += new EventHandler<CSLibrary.Notification.HotKeyEventArgs>(HotKeys_OnKeyEvent);
+            BleMvxApplication._reader.notification.OnKeyEvent += new EventHandler<CSLibrary.Notification.HotKeyEventArgs>(HotKeys_OnKeyEvent);
             //BleMvxApplication._reader.notification.OnVoltageEvent += new EventHandler<CSLibrary.Notification.VoltageEventArgs>(VoltageEvent);
 
             BleMvxApplication._reader.barcode.FastBarcodeMode(false);
@@ -312,7 +365,7 @@ namespace BLE.Client.ViewModels
 
 
             // Key Button event handler
-            //BleMvxApplication._reader.notification.OnKeyEvent -= new EventHandler<CSLibrary.Notification.HotKeyEventArgs>(HotKeys_OnKeyEvent);
+            BleMvxApplication._reader.notification.OnKeyEvent -= new EventHandler<CSLibrary.Notification.HotKeyEventArgs>(HotKeys_OnKeyEvent);
             //BleMvxApplication._reader.notification.OnVoltageEvent -= new EventHandler<CSLibrary.Notification.VoltageEventArgs>(VoltageEvent);
 
             BleMvxApplication._reader.barcode.FastBarcodeMode(false);
@@ -322,10 +375,10 @@ namespace BLE.Client.ViewModels
             base.Suspend();
         }
 
-        protected override void InitFromBundle(IMvxBundle parameters)
+        /*protected override void InitFromBundle(IMvxBundle parameters)
         {
             base.InitFromBundle(parameters);
-        }
+        }*/
 
 
         void TagInventoryEvent(object sender, CSLibrary.Events.OnAsyncCallbackEventArgs e)

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:BLE.Client.Pages;assembly=BLE.Client"
+             x:Class="BLE.Client.Pages.PageCheckingProduct"
+               Title = "{Binding Title2}" >
+    <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Refresh"  Command="{Binding OnRefreshButtonCommand}" />
+    <ToolbarItem Text="Reset"  Command="{Binding OnResetButtonCommand}" />
+  </ContentPage.ToolbarItems>
+    <StackLayout  Grid.Row="1" Grid.Column="0" Orientation="Horizontal" >
+      <ListView x:Name="listView"
+                ItemsSource="{Binding CheckList, Mode=OneWay}" RowHeight="25">
+        <ListView.Header>
+          <Grid BackgroundColor="#cccccc">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="50" />
+              <ColumnDefinition Width="100" />
+              <ColumnDefinition Width="100" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Text="Code" Grid.Row="0" Grid.Column="0" />
+            <Label Text="Name" Grid.Row="0" Grid.Column="1" />
+            <Label Text="Price" Grid.Row="0" Grid.Column="2" />
+            <Label Text="EPC(RFID)" Grid.Row="0" Grid.Column="3" />
+            <Label Text=" X " Grid.Row="0" Grid.Column="4" />
+          </Grid>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <StackLayout Orientation="Horizontal" >
+
+                <Label Text="{Binding Code}" WidthRequest="50"
+                       FontAttributes="Bold" />
+                <Label Text="{Binding Name, Mode=OneWay}" WidthRequest="100" />
+                <Label Text="{Binding GiaBan}" WidthRequest="100" HorizontalTextAlignment="End"  />
+                <Label Text="{Binding RfId}"  />
+                <Label Text="" HorizontalOptions="EndAndExpand" VerticalOptions="Center" WidthRequest="20" >
+                                <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding KiemKe}" Value="False">
+                            <Setter Property="Text"  Value="" />
+                            <Setter Property="BackgroundColor"  Value="White" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding KiemKe}" Value="True">
+                            <Setter Property="Text"  Value=" X " />
+                            <Setter Property="BackgroundColor"  Value="Green" />
+                                        
+                    </DataTrigger>
+                </Label.Triggers>
+                                </Label>
+              </StackLayout>
+                        
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+
+      </ListView>
+      
+    </StackLayout>
+</pages:BasePage>

@@ -18,8 +18,12 @@ namespace BLE.Client.Droid
     {
         static string HOST = "http://118.69.37.147:8080";
         static readonly string BASE_URL = "demo/api/";
-        static string KHO_URI = BASE_URL + "kho";
+        static string KHO_URI = BASE_URL + "kho/tracuuton";
         static string XUATKHO_URI = BASE_URL + "kho/xuat";
+        static string KIEMKHO_URI = BASE_URL + "kho/kiem";
+        static string RESETKHO_URI = BASE_URL + "kho/resetkiemkhos";
+
+
 
         private RestClient restClient = null;
         
@@ -43,6 +47,36 @@ namespace BLE.Client.Droid
             request.AddJsonBody(dto);
             var response = restClient.Put<KhoDTO>(request);
             return response.Data;
+        }
+
+        public bool KiemOk(string rfid)
+        {
+            var request = new RestRequest(KIEMKHO_URI + "/" + rfid, DataFormat.Json);
+            try
+            {
+                var response = restClient.Put(request);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+
+        }
+
+        public bool ResetKiem()
+        {
+            var request = new RestRequest(RESETKHO_URI, DataFormat.Json);
+            try
+            {
+                var response = restClient.Post(request);
+                return response.IsSuccessful;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

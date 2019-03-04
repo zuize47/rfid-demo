@@ -12,5 +12,8 @@ namespace BLE.Client.Data
 
         KhoDTO XuatKho(XuatkhoDTO dto);
 
+        bool KiemOk(string rfid);
+
+        bool ResetKiem();
     }
 }
