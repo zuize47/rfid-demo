@@ -9,7 +9,6 @@ using BLE.Client.Data;
 using MvvmCross.Core.ViewModels;
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Contracts;
-using Prism;
 using Xamarin.Forms;
 
 namespace BLE.Client.ViewModels
@@ -17,24 +16,27 @@ namespace BLE.Client.ViewModels
     public class ViewModelDemo : BaseViewModel
     {
         public static int TabIndex { get; set; } = 0;
+        public static string EPCCopy { get; set; } = "";
 
         private IUserDialogs _userDialogs;
         private IApiClient _apiClient;
 
         public string Title1 { get; private set; } = "Issue Product";
-        public string Title2 { get; private set; } = "Checking Product";
+        public string Title2 { get; private set; } = "Checking Stock";
 
         public ICommand OnStartInventoryButtonCommand { protected set; get; }
         public ICommand OnClearButtonCommand { protected set; get; }
         public ICommand OnSaveButtonCommand { protected set; get; }
         public ICommand OnRefreshButtonCommand { protected set; get; }
         public ICommand OnResetButtonCommand { protected set; get; }
+        public ICommand OnCopyButtonCommand { protected set; get; }
 
         //public IList<KhoResultDTO> fromServer = new List<KhoResultDTO>();
 
         public IList<KhoResultDTO> fromServer { get; set; } = new List<KhoResultDTO>();
 
         public ObservableCollection<KhoResultDTO> CheckList { get; set; } = new ObservableCollection<KhoResultDTO>();
+
 
 
         public ViewModelDemo(IAdapter adapter, IUserDialogs userDialogs, IApiClient apiClient) : base(adapter)
@@ -47,6 +49,7 @@ namespace BLE.Client.ViewModels
             OnSaveButtonCommand = new Command(SaveClick);
             OnRefreshButtonCommand = new Command(RefreshClick);
             OnResetButtonCommand = new Command(ResetClick);
+            OnCopyButtonCommand = new Command(CopyClick);
 
             GetDataFromServer();
             updateCheckList();
@@ -102,6 +105,13 @@ namespace BLE.Client.ViewModels
             updateCheckList();
         }
 
+        private void CopyClick(object obj)
+        {
+            try { EPCCopy = YourSelectedItem.RfId; }
+            catch { }
+
+        }
+
         private void RefreshClick(object obj)
         {
             GetDataFromServer();
@@ -111,13 +121,26 @@ namespace BLE.Client.ViewModels
         private void updateCheckList()
         {
             this.CheckList.Clear();
+            int iTotal = 0;
+            int iQuan = 0;
+            int iCheckedQua = 0;
             foreach (var o in this.fromServer)
             {
                 this.CheckList.Add(o);
+               if (o.KiemKe)
+                    iCheckedQua++;
+                iTotal += o.GiaBan;
+                iQuan++;
             }
+            _TotalAmountCheck = iTotal.ToString("#,###");
+            _TotalQuantityCheck = iQuan.ToString("#,###");
+            _CheckedTotalQuantity = iCheckedQua.ToString("#,###");
+            RaisePropertyChanged(() => TotalAmountCheck);
+            RaisePropertyChanged(() => TotalQuantityCheck);
+            RaisePropertyChanged(() => CheckedTotalQuantity);
         }
 
-
+        public KhoResultDTO YourSelectedItem { get; set; }
 
         ~ViewModelDemo()
         {
@@ -127,10 +150,9 @@ namespace BLE.Client.ViewModels
 
         private void GetDataFromServer()
         {
-
             InvokeOnMainThread(() => {
                 this.fromServer.Clear();
-                foreach (var o in _apiClient.GetKhoResults())
+                foreach (var o in _apiClient.GetKhoResults().OrderBy(p => p.Name).ToList())
                 {
                     this.fromServer.Add(o);
                 }
@@ -168,11 +190,24 @@ namespace BLE.Client.ViewModels
         //private DateTime _dateSale = DateTime.Now;
         public DateTime SelectedDate { get; set; } = DateTime.Now;
 
-        //public string TotalAmount { get; set; } = "0";
+        //public string TotalAmount { get; set; } = "0";s
         private string _TotalAmountt = "0";
         public string TotalAmount { get { return _TotalAmountt; } }
+        private string _TotalQuantity = "0";
+        public string TotalQuantity { get { return _TotalQuantity; } }
+
+        private string _TotalAmountCheck = "0";
+        public string TotalAmountCheck { get { return _TotalAmountCheck; } }
+
+        private string _TotalQuantityCheck = "0";
+        public string TotalQuantityCheck { get { return _TotalQuantityCheck; } }
+
+        private string _CheckedTotalQuantity = "0";
+        public string CheckedTotalQuantity { get { return _CheckedTotalQuantity; } }
+
 
         public ObservableCollection<KhoResultDTO> Items { get; set; } = new ObservableCollection<KhoResultDTO>();
+
 
         public ObservableCollection<Starff> Staffs { get; private set; } = new ObservableCollection<Starff>();
 
@@ -213,7 +248,7 @@ namespace BLE.Client.ViewModels
         uint _noNewTag = 0;
         uint _newTagPerSecond = 0;
 
-        bool _cancelVoltageValue = false;
+        bool _cancelVoltageValue;
 
         private double _InventoryTime = 0;
         public string InventoryTime { get { return ((uint)_InventoryTime).ToString() + "s"; } }
@@ -280,7 +315,9 @@ namespace BLE.Client.ViewModels
                     Items.Clear();
                 }
                 _TotalAmountt = "0";
+                _TotalQuantity = "0";
                 RaisePropertyChanged(() => TotalAmount);
+                RaisePropertyChanged(() => TotalQuantity);
 
             }).ContinueWith(result => Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading()));
 
@@ -425,11 +462,8 @@ namespace BLE.Client.ViewModels
         {
             InvokeOnMainThread(() =>
             {
-               
-
-                lock (TagInfoList)
+               lock (TagInfoList)
                 {
-
                     string epcstr = info.epc.ToString();
 
                     try
@@ -450,21 +484,46 @@ namespace BLE.Client.ViewModels
 
                             //TagInfoList.Add(item);
                             TagInfoList.Insert(0, item);
+
                         }
-
-
-
-
 
                         var dto = this.fromServer.Where(e => e.RfId.Equals(info.epc.ToString(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
                         if (dto != null && TabIndex == 0)
                         {
-                            _TotalAmountt = (Convert.ToInt32(String.IsNullOrEmpty(_TotalAmountt) ? "0" : TotalAmount) + dto.GiaBan).ToString();
-                            RaisePropertyChanged(() => TotalAmount);
 
                             this.Items.Add(dto);
-                        }else if(dto != null && !dto.KiemKe && TabIndex == 1)
+                            ObservableCollection<KhoResultDTO> ListOut = new ObservableCollection<KhoResultDTO>(this.Items.OrderBy(x => x.Name));
+
+                            _TotalAmountt = (Convert.ToInt32(
+                                                        String.IsNullOrEmpty(_TotalAmountt) ? "0" : _TotalAmountt.Replace(",", "")) + dto.GiaBan).ToString("#,###");
+                            _TotalQuantity = (Convert.ToInt32(String.IsNullOrEmpty(_TotalQuantity) ? "0" : TotalQuantity) + 1).ToString();
+
+                            RaisePropertyChanged(() => TotalAmount);
+                            RaisePropertyChanged(() => TotalQuantity);
+
+                            InvokeOnMainThread(() =>
+                            {
+
+                                lock (Items)
+                                {
+                                    Items.Clear();
+                                    }
+                                });
+
+                           foreach (var v in ListOut)
+                            {
+                                this.Items.Add(v);
+                            }
+                            //this.Items.Add(dto);
+                            //this.Items.OrderBy(a => a.Name);
+                            //this.Items = this.Items.OrderBy(a => a.Name).ToList<KhoResultDTO>;
+
+                            //this.Items = itemTemp;
+                            //this.Items.Clear();
+                            //this.Items = new ObservableCollection<KhoResultDTO>(itemTemp.OrderByDescending(x => x.Name));
+                        }
+                        else if(dto != null && !dto.KiemKe && TabIndex == 1)
                         {
                             dto.KiemKe = true;
                             _apiClient.KiemOk(dto.RfId);
@@ -689,7 +748,9 @@ namespace BLE.Client.ViewModels
 
                 }
                 _TotalAmountt = "0";
+                _TotalQuantity = "0";
                 RaisePropertyChanged(() => TotalAmount);
+                RaisePropertyChanged(() => TotalQuantity);
             });
         }
 
@@ -721,4 +782,6 @@ namespace BLE.Client.ViewModels
         }
         #endregion
     }
+
+   
 }

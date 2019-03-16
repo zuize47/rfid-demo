@@ -65,20 +65,20 @@
 				        RelativeLayout.YConstraint ="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.21, Constant=2}"
 				        RelativeLayout.HeightConstraint="{ConstraintExpression Type = RelativeToParent, Property=Height, Factor=0.21, Constant=-4}" 
 				        RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=0.5, Constant=-4}" 	
-            />
+            />-->
 
-            <Button Text="Geiger Search" Font="Large"
+            <Button Text="EPC search" Font="Large"
 				        HorizontalOptions="FillAndExpand"
                 BackgroundColor="#C3C3C3"
                 TextColor="Black"
                 Command="{Binding OnGeigerButtonCommand}"
                 CommandParameter="1"
 				        RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0, Constant=2}"
-				        RelativeLayout.YConstraint ="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.42, Constant=2}"
+				        RelativeLayout.YConstraint ="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.3, Constant=2}"
 				        RelativeLayout.HeightConstraint="{ConstraintExpression Type = RelativeToParent, Property=Height, Factor=0.21, Constant=-4}" 
-				        RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=0.5, Constant=-4}" 	
+				        RelativeLayout.WidthConstraint="{ConstraintExpression Type = RelativeToParent, Property=Width, Factor=1, Constant=-4}" 	
             />
-
+            <!--
             <Button Text="Settings" Font="Large"
         				HorizontalOptions="FillAndExpand"
                 BackgroundColor="#C3C3C3"

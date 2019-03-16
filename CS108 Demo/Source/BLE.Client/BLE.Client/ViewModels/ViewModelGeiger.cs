@@ -16,6 +16,7 @@ namespace BLE.Client.ViewModels
 		private readonly IUserDialogs _userDialogs;
 
         public ICommand OnStartGeigerButtonCommand { protected set; get; }
+        public ICommand pasteButtonCommand { protected set; get; }
 
         private int _rssi = 0;
         private string _rssiString = "RSSI";
@@ -26,6 +27,9 @@ namespace BLE.Client.ViewModels
 
         private string _startGeigerButtonText = "Start";
         public string startGeigerButtonText { get { return _startGeigerButtonText; } }
+
+        private string _pasteButtonText = "Paste EPC";
+        public string pasteButtonText { get { return _pasteButtonText; } }
 
         private string _entryEPC;
         public string entryEPC { get { return _entryEPC; } set { _entryEPC = value; } }
@@ -46,6 +50,7 @@ namespace BLE.Client.ViewModels
             _entryEPC = BleMvxApplication._SELECT_EPC;
 
             OnStartGeigerButtonCommand = new Command(StartGeigerButtonClick);
+            pasteButtonCommand = new Command(pasteButtonClick);
 
             RaisePropertyChanged(() => entryEPC);
 
@@ -225,6 +230,12 @@ namespace BLE.Client.ViewModels
             {
                 StopGeiger();
             }
+        }
+
+        void pasteButtonClick()
+        {
+            _entryEPC = ViewModelDemo.EPCCopy;
+            RaisePropertyChanged(() => entryEPC);
         }
 
         public void TagSearchOneEvent(object sender, CSLibrary.Events.OnAsyncCallbackEventArgs e)

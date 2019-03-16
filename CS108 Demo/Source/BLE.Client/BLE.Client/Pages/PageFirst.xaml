@@ -3,27 +3,27 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:pages="clr-namespace:BLE.Client.Pages;assembly=BLE.Client"
              x:Class="BLE.Client.Pages.PageFirst"
-			 Title="Output">
+             Title="Stock Out">
 
   <ContentPage.ToolbarItems>
     <ToolbarItem Text= "{Binding startInventoryButtonText}" Command="{Binding OnStartInventoryButtonCommand}"  />
     <ToolbarItem Text="Clear" Command="{Binding OnClearButtonCommand}"  />
     <ToolbarItem Text="Save" Command="{Binding OnSaveButtonCommand}" />
   </ContentPage.ToolbarItems>
-  <Grid Padding="5" BackgroundColor="White">
+  <Grid Padding="3" BackgroundColor="White">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
-        <RowDefinition Height="50" />
+        <RowDefinition Height="25" />
     </Grid.RowDefinitions>
     
     <!--<StackLayout HeightRequest="30" VerticalOptions="Start" HorizontalOptions="FillAndExpand" Spacing="20">
             <Label Text="Xuất" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" />
         </StackLayout>-->
-    <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HeightRequest="40" >
+    <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HeightRequest="55" >
       <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
         <Label FontSize="13" Text="Date" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="80" />
         <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}" />
@@ -45,15 +45,15 @@
         <ListView.Header>
           <Grid BackgroundColor="#cccccc">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="50" />
-              <ColumnDefinition Width="100" />
-              <ColumnDefinition Width="100" />
+              <ColumnDefinition Width="125" />
+              <ColumnDefinition Width="180" />
+              <ColumnDefinition Width="60" />
               <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
               <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Text="Code" Grid.Row="0" Grid.Column="0" />
+            <Label Text="Barcode" Grid.Row="0" Grid.Column="0" />
             <Label Text="Name" Grid.Row="0" Grid.Column="1" />
             <Label Text="Price" Grid.Row="0" Grid.Column="2" />
             <Label Text="EPC(RFID)" Grid.Row="0" Grid.Column="3" />
@@ -64,10 +64,10 @@
             <ViewCell>
               <StackLayout Orientation="Horizontal" >
 
-                <Label Text="{Binding Code}" WidthRequest="50"
+                <Label Text="{Binding Code}" WidthRequest="125"
                        FontAttributes="Bold" />
-                <Label Text="{Binding Name}" WidthRequest="100" />
-                <Label Text="{Binding GiaBan}" WidthRequest="100" HorizontalTextAlignment="End"  />
+                <Label Text="{Binding Name}" WidthRequest="180" />
+                <Label Text="{Binding GiaBan , StringFormat='{0:#,###}'}" WidthRequest="60" HorizontalTextAlignment="End"  />
                 <Label Text="{Binding RfId}"  />
               </StackLayout>
             </ViewCell>
@@ -78,7 +78,17 @@
       
     </StackLayout>
         
-        <Label Grid.Row="2" Grid.Column="0" FontSize="13" Text="{Binding TotalAmount}" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="80" />
+       <!-- <Label Grid.Row="2" Grid.Column="0" FontSize="13" Text="{Binding TotalAmount}" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="80" /> -->
+    <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HeightRequest="30" >
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="13" Text="Total Quantity" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="100" />
+        <Label FontSize="13" Text="{Binding TotalQuantity , StringFormat='{0:#,###}'}" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="80" />
+      </StackLayout>
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="13" Text="Total Amount" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="100" />
+        <Label FontSize="13" Text="{Binding TotalAmount, StringFormat='{0:#,###}'}" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="100" />
+      </StackLayout>
+    </StackLayout>
   </Grid>
 
 </pages:BasePage>

@@ -5,25 +5,36 @@
              x:Class="BLE.Client.Pages.PageCheckingProduct"
                Title = "{Binding Title2}" >
     <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Copy EPC  "  Command="{Binding OnCopyButtonCommand}" />
     <ToolbarItem Text="Refresh"  Command="{Binding OnRefreshButtonCommand}" />
     <ToolbarItem Text="Reset"  Command="{Binding OnResetButtonCommand}" />
-  </ContentPage.ToolbarItems>
-    <StackLayout  Grid.Row="1" Grid.Column="0" Orientation="Horizontal" >
+</ContentPage.ToolbarItems>
+<Grid Padding="5" BackgroundColor="White">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="25" />
+    </Grid.RowDefinitions>
+    <StackLayout  Grid.Row="0" Grid.Column="0" Orientation="Horizontal" >
       <ListView x:Name="listView"
-                ItemsSource="{Binding CheckList, Mode=OneWay}" RowHeight="25">
+                ItemsSource="{Binding CheckList, Mode=OneWay}" 
+                SelectedItem="{Binding YourSelectedItem, Mode=TwoWay}"
+                RowHeight="25">
         <ListView.Header>
           <Grid BackgroundColor="#cccccc">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="50" />
-              <ColumnDefinition Width="100" />
-              <ColumnDefinition Width="100" />
+              <ColumnDefinition Width="120" />
+              <ColumnDefinition Width="160" />
+              <ColumnDefinition Width="70" />
               <ColumnDefinition Width="*" />
               <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
               <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Text="Code" Grid.Row="0" Grid.Column="0" />
+            <Label Text="Barcode" Grid.Row="0" Grid.Column="0" />
             <Label Text="Name" Grid.Row="0" Grid.Column="1" />
             <Label Text="Price" Grid.Row="0" Grid.Column="2" />
             <Label Text="EPC(RFID)" Grid.Row="0" Grid.Column="3" />
@@ -35,10 +46,10 @@
             <ViewCell>
               <StackLayout Orientation="Horizontal" >
 
-                <Label Text="{Binding Code}" WidthRequest="50"
+                <Label Text="{Binding Code}" WidthRequest="120"
                        FontAttributes="Bold" />
-                <Label Text="{Binding Name, Mode=OneWay}" WidthRequest="100" />
-                <Label Text="{Binding GiaBan}" WidthRequest="100" HorizontalTextAlignment="End"  />
+                <Label Text="{Binding Name, Mode=OneWay}" WidthRequest="160" />
+                <Label Text="{Binding GiaBan , StringFormat='{0:#,###}'}" WidthRequest="70" HorizontalTextAlignment="End"  />
                 <Label Text="{Binding RfId}"  />
                 <Label Text="" HorizontalOptions="EndAndExpand" VerticalOptions="Center" WidthRequest="20" >
                                 <Label.Triggers>
@@ -62,4 +73,21 @@
       </ListView>
       
     </StackLayout>
+    
+     <StackLayout Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HeightRequest="30" >
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="13" Text="Total Quantity" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="100" />
+        <Label FontSize="13" Text="{Binding TotalQuantityCheck , StringFormat='{0:#,###}'}" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="60" />
+      </StackLayout>
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="13" Text="Checked Total Quantity" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="150" />
+        <Label FontSize="13" Text="{Binding CheckedTotalQuantity, StringFormat='{0:#,###}'}" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="60" />
+      </StackLayout>
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="13" Text="Total Amount" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="100" />
+        <Label FontSize="13" Text="{Binding TotalAmountCheck, StringFormat='{0:#,###}'}" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="100" />
+      </StackLayout>
+      
+    </StackLayout>
+</Grid>
 </pages:BasePage>
