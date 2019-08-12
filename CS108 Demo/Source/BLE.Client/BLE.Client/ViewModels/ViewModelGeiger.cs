@@ -34,6 +34,15 @@ namespace BLE.Client.ViewModels
         private string _entryEPC;
         public string entryEPC { get { return _entryEPC; } set { _entryEPC = value; } }
 
+        private string _entrybarcode;
+        public string entrybarCode { get { return _entrybarcode; } set { _entrybarcode = value; } }
+
+        private string _entryname;
+        public string entryname { get { return _entryname; } set { _entryname = value; } }
+
+        private string _entryGiaBan;
+        public string entryGiaBan { get { return _entryGiaBan; } set { _entryGiaBan = value; } }
+
         private uint _power = 300;
         public uint power { get { return _power; } set { _power = value; } }
 
@@ -235,7 +244,13 @@ namespace BLE.Client.ViewModels
         void pasteButtonClick()
         {
             _entryEPC = ViewModelDemo.EPCCopy;
+            _entrybarcode = ViewModelDemo.BarcodeCopy;
+            _entryname = ViewModelDemo.NameCopy;
+            _entryGiaBan = ViewModelDemo.PriceCopy;
             RaisePropertyChanged(() => entryEPC);
+            RaisePropertyChanged(() => entrybarCode);
+            RaisePropertyChanged(() => entryname);
+            RaisePropertyChanged(() => entryGiaBan);
         }
 
         public void TagSearchOneEvent(object sender, CSLibrary.Events.OnAsyncCallbackEventArgs e)

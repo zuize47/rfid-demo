@@ -17,6 +17,9 @@ namespace BLE.Client.ViewModels
     {
         public static int TabIndex { get; set; } = 0;
         public static string EPCCopy { get; set; } = "";
+        public static string BarcodeCopy { get; set; } = "";
+        public static string NameCopy { get; set; } = "";
+        public static string PriceCopy { get; set; } = "";
 
         private IUserDialogs _userDialogs;
         private IApiClient _apiClient;
@@ -107,7 +110,11 @@ namespace BLE.Client.ViewModels
 
         private void CopyClick(object obj)
         {
-            try { EPCCopy = YourSelectedItem.RfId; }
+            try { EPCCopy = YourSelectedItem.RfId;
+                NameCopy = YourSelectedItem.Name;
+                BarcodeCopy = YourSelectedItem.Code;
+                PriceCopy = YourSelectedItem.GiaBan.ToString("#,###");
+            }
             catch { }
 
         }
@@ -282,7 +289,7 @@ namespace BLE.Client.ViewModels
                 return;
             }
 
-            Device.BeginInvokeOnMainThread(() => this._userDialogs.ShowLoading("Loading ...", MaskType.Black));
+            //Device.BeginInvokeOnMainThread(() => this._userDialogs.ShowLoading("Loading ...", MaskType.Black));
             Task.Run(() =>
             {
                 //var step = 100 / this.Items.Count;

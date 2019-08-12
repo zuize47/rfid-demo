@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Acr.UserDialogs;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using Plugin.BLE.Abstractions.Contracts;
-
-using System.ComponentModel;
 using System.Windows.Input;
 using Xamarin.Forms;
-
-using BLE.Client.Extensions;
 
 using Plugin.BLE.Abstractions;
 using Plugin.Settings.Abstractions;
@@ -304,6 +298,7 @@ namespace BLE.Client.ViewModels
         }
 
         public ICommand OnReadWriteButtonCommand { protected set; get; }
+
 
         void OnReadWriteButtonClicked()
         {

@@ -10,23 +10,41 @@
    
   </ContentPage.ToolbarItems>
   <StackLayout Margin="0,0,0,0">
-    
+    <!--
     <Label Text="Selected EPC" />
-    <Entry Text="{ Binding entryEPC, Mode=TwoWay }" />
-    
+    <Entry Text="{ Binding entryEPC, Mode=TwoWay }" /> -->
+    <StackLayout Orientation="Horizontal">
+      <Label Text="Selected EPC" WidthRequest="100" VerticalOptions="Center" />
+      <Entry x:Name="entryEPC" Text="{ Binding entryEPC, Mode=TwoWay }" WidthRequest="320"/>
+    </StackLayout>
+        
+     <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HeightRequest="40" >
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="14" Text="Barcode: " TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="60" />
+        <Entry x:Name="entrybarCode" FontSize="15" Text="{ Binding entrybarCode, Mode=TwoWay }" WidthRequest="130"/>
+      </StackLayout>
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="14" Text="Name: " TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="47" />
+        <Entry x:Name="entryname" FontSize="15" Text="{ Binding entryname, Mode=TwoWay }" WidthRequest="220"/>
+      </StackLayout>
+      <StackLayout Spacing="0" BackgroundColor="White" Orientation="Horizontal" HorizontalOptions="Start">
+        <Label FontSize="14" Text="Price: " TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="50" />
+        <Entry x:Name="entryGiaBan" FontSize="15" Text="{Binding entryGiaBan , StringFormat='{0:#,###}'}" WidthRequest="80" HorizontalTextAlignment="Center" />
+      </StackLayout>
+    </StackLayout>
 
     <StackLayout Orientation="Horizontal">
-      <Label Text="Power (0-300)" WidthRequest="100" VerticalOptions="Center" />
+      <Label Text="Power (0-300)" WidthRequest="200" VerticalOptions="Center" />
       <Entry x:Name="entryPower" Text="{ Binding power, Mode=TwoWay }" Unfocused="entryPowerCompleted" HorizontalOptions="FillAndExpand" />
     </StackLayout>
 
     <Label Text = "" />
-    <Label Text="{Binding rssiStart}" Font="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+    <Label Text="{Binding rssiStart}" FontSize="14" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
     <Label Text = "" />
 
     <ProgressBar x:Name="progressbarRSSI" Progress="{Binding progressbarRSSIValue}" WidthRequest="300" HeightRequest="30" HorizontalOptions="Center" VerticalOptions="Center" />
   
-    <Button Text= "{Binding startGeigerButtonText}" Font="Large" Command="{Binding OnStartGeigerButtonCommand}" />
+    <Button Text= "{Binding startGeigerButtonText}" FontSize="14" Command="{Binding OnStartGeigerButtonCommand}" />
 
     </StackLayout>
 </pages:BasePage>
